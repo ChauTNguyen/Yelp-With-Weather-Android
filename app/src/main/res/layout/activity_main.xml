@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainTable"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="5dip"
+    android:layout_marginRight="5dip"
+    android:paddingLeft="3dip"
+    android:paddingRight="3dip"
+    android:shrinkColumns="1"
+    android:stretchColumns="*">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/descTextLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/descLabel" />
+        <EditText
+            android:id="@+id/descTextField"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="15" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/nearTextLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/nearLabel" />
+        <EditText
+            android:id="@+id/nearTextField"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="15" />
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/searchButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <Button
+            android:text="@string/searchButtonLabel"
+            android:layout_width="match_parent"
+            android:layout_weight="20"
+            android:layout_height="wrap_content"
+            android:background="#FF0000"/>
+    </TableRow>
+
+    <include layout="@layout/content_main" />
+
+</TableLayout>

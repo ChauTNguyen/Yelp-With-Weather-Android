@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">YelpResults</string>
+
+    <string name="descLabel">Find: </string>
+    <string name="nearLabel">Near: </string>
+    <string name="searchButtonLabel">Search!</string>
+</resources>
