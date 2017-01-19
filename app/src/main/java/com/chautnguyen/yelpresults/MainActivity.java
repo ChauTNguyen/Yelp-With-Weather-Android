@@ -1,14 +1,18 @@
 package com.chautnguyen.yelpresults;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,8 +30,12 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
+    private TextView descTextLabel;
+    private TextView nearTextLabel;
     private EditText descTextField;
     private EditText nearTextField;
+    private Button searchButton;
+    private MenuItem menuSearch;
 
     private BusinessAdapter businessAdapter;
 
@@ -36,6 +44,31 @@ public class MainActivity extends AppCompatActivity {
 
 
     OkHttpClient client = new OkHttpClient();
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        menuSearch = menu.findItem(R.id.show_search);
+        menuSearch.setVisible(false);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.show_search:
+                descTextLabel.setVisibility(View.VISIBLE);
+                nearTextLabel.setVisibility(View.VISIBLE);
+                descTextField.setVisibility(View.VISIBLE);
+                nearTextField.setVisibility(View.VISIBLE);
+                searchButton.setVisibility(View.VISIBLE);
+                menuSearch.setVisible(false);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
 
     void sendGetRequest(String url) throws IOException {
         ProgressDialog progress = new ProgressDialog(this);
@@ -88,6 +121,14 @@ public class MainActivity extends AppCompatActivity {
                                         listView.setAdapter(businessAdapter);
                                     } else {
                                         loadBusinesses(yelpBusinesses, businesses);
+
+                                        descTextLabel.setVisibility(View.GONE);
+                                        nearTextLabel.setVisibility(View.GONE);
+                                        descTextField.setVisibility(View.GONE);
+                                        nearTextField.setVisibility(View.GONE);
+                                        searchButton.setVisibility(View.GONE);
+                                        menuSearch.setVisible(true);
+
                                         businessAdapter.clear();
                                         businessAdapter.addAll(yelpBusinesses);
                                         businessAdapter.notifyDataSetChanged();
@@ -95,6 +136,19 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
                         } catch (Exception err) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                                            .setTitle("Error!")
+                                            .setMessage("Search queries returned 0 results.")
+                                            .setPositiveButton(android.R.string.ok, null)
+                                            .create();
+
+                                    dialog.show();
+                                }
+                            });
+
                             System.out.println(err);
                         }
                     }
@@ -132,6 +186,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        descTextLabel = (TextView) findViewById(R.id.descTextLabel);
+        nearTextLabel = (TextView) findViewById(R.id.nearTextLabel);
         descTextField = (EditText) findViewById(R.id.descTextField);
         nearTextField = (EditText) findViewById(R.id.nearTextField);
 
@@ -139,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
         final int searchButtonIndexInRow = 2;
         TableRow row = (TableRow) mainLayout.getChildAt(searchButtonIndexInRow);
-        Button searchButton = (Button) row.getChildAt(0);
+        searchButton = (Button) row.getChildAt(0);
 
         // TODO: Leave this as default?
         try { // TODO: Catch errors properly.
