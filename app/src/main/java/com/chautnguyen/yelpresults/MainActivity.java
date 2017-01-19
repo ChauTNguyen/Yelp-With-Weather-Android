@@ -25,9 +25,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-
 public class MainActivity extends AppCompatActivity {
-
     private ListView listView;
     private TextView descTextLabel;
     private TextView nearTextLabel;
@@ -149,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-        progress.dismiss();
     }
 
     private void loadBusinesses(ArrayList<YelpBusiness> yelpBusinesses, JSONArray businesses) {
@@ -190,9 +187,8 @@ public class MainActivity extends AppCompatActivity {
         TableRow row = (TableRow) mainLayout.getChildAt(searchButtonIndexInRow);
         searchButton = (Button) row.getChildAt(0);
 
-        // TODO: Leave this as default?
         try { // TODO: Catch errors properly.
-            hitMyApi("coffee", "garden grove"); // TODO: Trim for best practice / Replace with +.
+            hitMyApi("coffee", "san francisco");
         } catch (Exception e) {
             System.out.println(e);
         }

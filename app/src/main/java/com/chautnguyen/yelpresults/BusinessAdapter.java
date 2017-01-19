@@ -11,7 +11,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class BusinessAdapter extends ArrayAdapter<YelpBusiness> {
-
     public BusinessAdapter(Context context, ArrayList<YelpBusiness> businesses) {
         super(context, 0, businesses);
     }
@@ -39,5 +38,4 @@ public class BusinessAdapter extends ArrayAdapter<YelpBusiness> {
 
         return convertView;
     }
-
 }

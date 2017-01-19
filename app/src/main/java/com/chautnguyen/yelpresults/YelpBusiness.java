@@ -1,7 +1,6 @@
 package com.chautnguyen.yelpresults;
 
 public class YelpBusiness {
-
     private String name;
     private int reviewCount;
     private String url;
@@ -22,13 +21,6 @@ public class YelpBusiness {
         this.imageUrl = imageUrl;
         this.displayAddress = displayAddress;
         this.ratingImageUrl = ratingImageUrl;
-
-//        System.out.print(name);
-//        System.out.println("review count: " + reviewCount);
-//        System.out.println(url);
-//        System.out.println(imageUrl);
-//        System.out.println(displayAddress);
-//        System.out.println(ratingImageUrl);
     }
 
     public String getRatingImageUrl() {
@@ -78,5 +70,4 @@ public class YelpBusiness {
     public void setDisplayAddress(String displayAddress) {
         this.displayAddress = displayAddress;
     }
-
 }
