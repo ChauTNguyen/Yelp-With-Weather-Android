@@ -1,7 +1,6 @@
 package com.chautnguyen.yelpresults;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -39,9 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private BusinessAdapter businessAdapter;
 
-    private ArrayList<String> yelpBusinessList;
     private ArrayList<YelpBusiness> yelpBusinesses;
-
 
     OkHttpClient client = new OkHttpClient();
 
@@ -57,12 +54,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.show_search:
-                descTextLabel.setVisibility(View.VISIBLE);
-                nearTextLabel.setVisibility(View.VISIBLE);
-                descTextField.setVisibility(View.VISIBLE);
-                nearTextField.setVisibility(View.VISIBLE);
-                searchButton.setVisibility(View.VISIBLE);
-                menuSearch.setVisible(false);
+                showOrHideSearch(true);
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -70,13 +62,25 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    void sendGetRequest(String url) throws IOException {
-        ProgressDialog progress = new ProgressDialog(this);
-        progress.setTitle("Loading");
-        progress.setMessage("Wait while loading...");
-        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
-        progress.show();
+    private void showOrHideSearch(boolean show) {
+        if (show) {
+            descTextLabel.setVisibility(View.VISIBLE);
+            nearTextLabel.setVisibility(View.VISIBLE);
+            descTextField.setVisibility(View.VISIBLE);
+            nearTextField.setVisibility(View.VISIBLE);
+            searchButton.setVisibility(View.VISIBLE);
+            menuSearch.setVisible(!show);
+        } else {
+            descTextLabel.setVisibility(View.GONE);
+            nearTextLabel.setVisibility(View.GONE);
+            descTextField.setVisibility(View.GONE);
+            nearTextField.setVisibility(View.GONE);
+            searchButton.setVisibility(View.GONE);
+            menuSearch.setVisible(!show);
+        }
+    }
 
+    private void sendGetRequest(String url) throws IOException {
         listView = (ListView) findViewById(R.id.listView);
 
         Request request = new Request.Builder()
@@ -116,19 +120,11 @@ public class MainActivity extends AppCompatActivity {
                                 public void run() {
                                     if (businessAdapter == null) {
                                         loadBusinesses(yelpBusinesses, businesses);
-
                                         businessAdapter = new BusinessAdapter(MainActivity.this, yelpBusinesses);
                                         listView.setAdapter(businessAdapter);
                                     } else {
                                         loadBusinesses(yelpBusinesses, businesses);
-
-                                        descTextLabel.setVisibility(View.GONE);
-                                        nearTextLabel.setVisibility(View.GONE);
-                                        descTextField.setVisibility(View.GONE);
-                                        nearTextField.setVisibility(View.GONE);
-                                        searchButton.setVisibility(View.GONE);
-                                        menuSearch.setVisible(true);
-
+                                        showOrHideSearch(false);
                                         businessAdapter.clear();
                                         businessAdapter.addAll(yelpBusinesses);
                                         businessAdapter.notifyDataSetChanged();
@@ -160,20 +156,17 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < businesses.length(); ++i) {
             try {
                 JSONObject bizObj = businesses.getJSONObject(i);
-
                 JSONObject loc = bizObj.getJSONObject("location");
                 JSONArray displayAddress = loc.getJSONArray("display_address");
 
-                YelpBusiness biz = new YelpBusiness(
+                yelpBusinesses.add(new YelpBusiness(
                         bizObj.getString("name"),
                         bizObj.getInt("review_count"),
                         bizObj.getString("mobile_url"),
                         bizObj.getString("image_url"),
                         displayAddress.getString(0) + "\n" + displayAddress.getString(1),
                         bizObj.getString("rating_img_url_small")
-                );
-
-                yelpBusinesses.add(biz);
+                ));
             } catch (Exception err) {
                 System.out.println(err);
             }
@@ -199,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: Leave this as default?
         try { // TODO: Catch errors properly.
-            hitMyApi("burrito", "garden grove"); // TODO: Trim for best practice / Replace with +.
+            hitMyApi("coffee", "garden grove"); // TODO: Trim for best practice / Replace with +.
         } catch (Exception e) {
             System.out.println(e);
         }
